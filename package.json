@@ -1,0 +1,29 @@
+{
+  "name": "@apostrophecms/import-a2-tags",
+  "version": "1.0.0",
+  "description": "Import tags from A2 to tag piece types corresponding to various piece and page types in your project",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "eslint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apostrophecms/import-a2-tags.git"
+  },
+  "keywords": [
+    "apostrophecms"
+  ],
+  "author": "Apostrophe Technologies",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apostrophecms/import-a2-tags/issues"
+  },
+  "homepage": "https://github.com/apostrophecms/import-a2-tags#readme",
+  "devDependencies": {
+    "apostrophe": "^3.52.0",
+    "eslint": "^8.44.0",
+    "eslint-config-apostrophe": "^4.0.0",
+    "mocha": "^10.2.0"
+  }
+}
