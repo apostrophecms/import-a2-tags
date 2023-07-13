@@ -21,6 +21,9 @@ module.exports = {
             const to = self.apos.modules[toType];
             // Find all subclasses too
             const fromTypes = Object.keys(self.apos.modules).filter(type => self.apos.modules[type].__meta.chain.find(entry => entry.name === fromType));
+            if (!fromTypes.length) {
+              throw `The module ${fromType} does not exist and is not a base class for any other active module`;
+            }
             for (const type of fromTypes) {
               const tagIds = new Map();
               await self.apos.migration.eachDoc({
