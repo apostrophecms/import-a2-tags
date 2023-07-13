@@ -17,7 +17,7 @@ describe('A2 tag importer', function () {
       testModule: true,
       modules: {
         '@apostrophecms/import-a2-tags': {},
-        'article': {
+        article: {
           extend: '@apostrophecms/piece-type',
           fields: {
             add: {
@@ -50,7 +50,7 @@ describe('A2 tag importer', function () {
 
   it('Should be able to import A2 legacy tags from articles as A3 relationships', async () => {
     const req = apos.task.getReq();
-    await apos.task.invoke('@apostrophecms/import-a2-tags:import', {      
+    await apos.task.invoke('@apostrophecms/import-a2-tags:import', {
       types: 'article:article-tag'
     });
     const articles = await apos.modules.article.find(req).toArray();

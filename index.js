@@ -32,10 +32,10 @@ module.exports = {
               }, async doc => {
                 const tags = doc.tags;
                 for (const name of tags) {
-                  let tagId =
-                    tagIds.get(name)
-                    || (await to.find(req, { title: name }).toObject())?._id
-                    || (await to.insert(req, {
+                  const tagId =
+                    tagIds.get(name) ||
+                    (await to.find(req, { title: name }).toObject())?._id ||
+                    (await to.insert(req, {
                       title: name
                     }))._id;
                   tagIds.set(name, tagId);
@@ -43,7 +43,7 @@ module.exports = {
                     _id: doc._id
                   }, {
                     $addToSet: {
-                      'tagsIds': tagId
+                      tagsIds: tagId
                     }
                   });
                 }
@@ -53,5 +53,5 @@ module.exports = {
         }
       }
     };
-  },
+  }
 };
