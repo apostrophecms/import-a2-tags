@@ -65,5 +65,11 @@ describe('A2 tag importer', function () {
     }
     const tags = await apos.modules['article-tag'].find(req).toArray();
     assert(tags.length === 11);
+    // Verify everything exists both as draft and as published
+    const modes = [ 'draft', 'published' ];
+    for (const aposMode of modes) {
+      assert((await apos.doc.db.countDocuments({ type: 'article', aposMode })) === 10);
+      assert((await apos.doc.db.countDocuments({ type: 'article-tag', aposMode })) === 11);
+    }
   });
 });
