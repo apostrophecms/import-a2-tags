@@ -4,7 +4,7 @@
   "description": "Import tags from A2 to tag piece types corresponding to various piece and page types in your project",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "eslint && mocha",
     "eslint": "eslint ."
   },
   "repository": {
