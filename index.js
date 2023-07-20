@@ -1,4 +1,36 @@
 module.exports = {
+  init(self) {
+    self.addMigration();
+  },
+  methods(self) {
+    return {
+      addMigration() {
+        self.apos.migration.add('import-a2-tags-fix-invalid-ids', async () => {
+          await self.apos.migration.eachDoc({
+            'tagsIds.0': { $exists: 1 }
+          }, async doc => {
+            let changed = false;
+            let tagsIds = doc.tagsIds.map(tagId => {
+              if (tagId.includes(':')) {
+                tagId = tagId.split(':')[0];
+                changed = true;
+              }
+              return tagId;
+            });
+            if (changed) {
+              await self.apos.doc.db.updateOne({
+                _id: doc._id
+              }, {
+                $set: {
+                  tagsIds
+                }
+              });
+            }
+          });
+        });
+      }
+    };
+  },
   tasks(self) {
     return {
       import: {
@@ -32,20 +64,39 @@ module.exports = {
               }, async doc => {
                 const tags = doc.tags;
                 for (const name of tags) {
+                  const localeParams = {};
+                  if (doc.aposLocale) {
+                    localeParams.locale = doc.aposLocale.split(':')[0];
+                    localeParams.mode = doc.aposMode;
+                  }
+                  const localeReq = req.clone(localeParams);
                   const tagId =
                     tagIds.get(name) ||
-                    (await to.find(req, { title: name }).toObject())?._id ||
-                    (await to.insert(req, {
+                    (await to.find(localeReq, { title: name }).toObject())?.aposDocId ||
+                    (await insert({
                       title: name
-                    }))._id;
+                    })).aposDocId;
                   tagIds.set(name, tagId);
                   await self.apos.doc.db.updateOne({
                     _id: doc._id
                   }, {
                     $addToSet: {
                       tagsIds: tagId
+                    },
+                    $set: {
+                      [`tagsFields.${tagId}`]: {}
                     }
                   });
+
+                  async function insert(data) {
+                    const tag = await to.insert(localeReq, data);
+                    if (tag.aposMode === 'draft') {
+                      if (!to.options.autopublish) {
+                        await to.publish(localeReq, tag);
+                      }
+                    }
+                    return tag;
+                  }
                 }
               });
             }

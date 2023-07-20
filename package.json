@@ -1,6 +1,6 @@
 {
   "name": "@apostrophecms/import-a2-tags",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Import tags from A2 to tag piece types corresponding to various piece and page types in your project",
   "main": "index.js",
   "scripts": {

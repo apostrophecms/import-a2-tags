@@ -58,6 +58,8 @@ describe('A2 tag importer', function () {
       const article = articles.find(article => article.title === `Article ${i}`);
       assert(article);
       assert(article.tagsIds.length === 2);
+      assert(article.tagsFields);
+      assert(Object.keys(article.tagsFields).length === 2);
       assert(article._tags);
       assert(article._tags.length === 2);
       assert(article._tags[0].title === `Tag ${i}`);
